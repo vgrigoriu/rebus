@@ -5,7 +5,7 @@ using System.Text;
 
 namespace RebusLib
 {
-    class WordList: List<Word>
+    public class WordList: List<Word>
     {
         public void Add(IEnumerable<string> words, int weight)
         {
