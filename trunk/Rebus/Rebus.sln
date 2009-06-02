@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual C# Express 2008
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rebus", "Rebus\Rebus.csproj", "{4645CA76-019D-4CE8-892B-5CB2502049F6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RebusLib", "RebusLib\RebusLib.csproj", "{676200EE-356D-4FA5-9E8C-4BF59A64E38D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -13,6 +15,10 @@ Global
 		{4645CA76-019D-4CE8-892B-5CB2502049F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4645CA76-019D-4CE8-892B-5CB2502049F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4645CA76-019D-4CE8-892B-5CB2502049F6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{676200EE-356D-4FA5-9E8C-4BF59A64E38D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{676200EE-356D-4FA5-9E8C-4BF59A64E38D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{676200EE-356D-4FA5-9E8C-4BF59A64E38D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{676200EE-356D-4FA5-9E8C-4BF59A64E38D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
