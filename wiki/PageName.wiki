@@ -1,0 +1,1 @@
+Lista cuvintelor permise: http://rebusonline.com/data/cuvinte-titlu.txt
