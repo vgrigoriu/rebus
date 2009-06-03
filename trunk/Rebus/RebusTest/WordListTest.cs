@@ -10,7 +10,7 @@ using System.Text.RegularExpressions;
 namespace RebusTest
 {
     [TestFixture]
-    public class WordListTest : AssertionHelper
+    public class WordlistTest : AssertionHelper
     {
         [Test]
         public void AddWords()
