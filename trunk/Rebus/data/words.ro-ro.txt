@@ -23623,7 +23623,6 @@ coluviu
 coluziune
 coluziuni
 coma
-comandita
 comandite
 comanac
 comanace
@@ -27860,7 +27859,6 @@ cranii
 craniologa
 craniologe
 craniologi
-craniologie
 craniolog
 craniologic
 craniologica
@@ -94678,7 +94676,6 @@ pompoase
 pompon
 pompos
 pomposi
-pomostina
 pomulet
 pomuleti
 pomusoara
@@ -102444,7 +102441,6 @@ razant
 razanta
 razante
 razanti
-razareata
 razaret
 razareata
 razareti
