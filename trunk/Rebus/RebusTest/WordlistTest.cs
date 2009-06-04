@@ -1,5 +1,6 @@
 ﻿namespace RebusTest
 {
+    using System;
     using System.Collections;
     using System.Collections.Generic;
     using System.IO;
@@ -50,7 +51,10 @@
             string[] words = File.ReadAllLines(@"..\..\..\data\words.ro-ro.txt");
             int weight = 7;
             Wordlist list = new Wordlist();
+            DateTime start = DateTime.Now;
             list.Add(words, weight);
+            DateTime end = DateTime.Now;
+            Console.WriteLine("All Words added in {0}", end - start);
 
             Expect(list.Words.Count, Is.EqualTo(134255));
         }

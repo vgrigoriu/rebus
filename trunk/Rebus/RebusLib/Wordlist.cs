@@ -12,19 +12,19 @@
     /// </summary>
     public class Wordlist
     {
-        private List<Word> wordCollection = new List<Word>();
+        private Dictionary<string, Word> wordCollection = new Dictionary<string, Word>();
 
         public ICollection<Word> Words
         {
             get
             {
-                return this.wordCollection;
+                return this.wordCollection.Values;
             }
         }
 
         public ICollection<Word> WordsMatching(Regex regex)
         {
-            return (from Word word in this.wordCollection
+            return (from Word word in this.wordCollection.Values
                    where regex.IsMatch(word.Value)
                    select word).ToList();
         }
@@ -43,7 +43,7 @@
             if (word == null)
             {
                 word = new Word(value, weight);
-                this.wordCollection.Add(word);
+                this.wordCollection.Add(value, word);
             }
             else
             {
@@ -57,9 +57,9 @@
             Word word = null;
             try
             {
-                word = this.wordCollection.First(w => w.Value == value);
+                word = this.wordCollection[value];
             }
-            catch (InvalidOperationException) 
+            catch (KeyNotFoundException) 
             { 
                 /*ignore*/ 
             }
