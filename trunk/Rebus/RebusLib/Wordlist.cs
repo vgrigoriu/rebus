@@ -1,12 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Collections;
-using System.Text.RegularExpressions;
-
-namespace RebusLib
+﻿namespace RebusLib
 {
+    using System;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Text.RegularExpressions;
+
+    /// <summary>
+    /// Keeps a list of weighted words, can retrieve those matching a regex
+    /// </summary>
     public class Wordlist
     {
         private List<Word> wordCollection = new List<Word>();
@@ -15,13 +18,13 @@ namespace RebusLib
         {
             get
             {
-                return wordCollection;
+                return this.wordCollection;
             }
         }
 
         public ICollection<Word> WordsMatching(Regex regex)
         {
-            return (from Word word in wordCollection
+            return (from Word word in this.wordCollection
                    where regex.IsMatch(word.Value)
                    select word).ToList();
         }
@@ -54,9 +57,12 @@ namespace RebusLib
             Word word = null;
             try
             {
-                word = wordCollection.First(w => w.Value == value);
+                word = this.wordCollection.First(w => w.Value == value);
             }
-            catch (InvalidOperationException) { /*ignore*/ }
+            catch (InvalidOperationException) 
+            { 
+                /*ignore*/ 
+            }
 
             return word;
         }

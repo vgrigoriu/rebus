@@ -1,13 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace Rebus
+﻿namespace Rebus
 {
-    class Program
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+
+    /// <summary>
+    /// Doesn't do anything. Yet.
+    /// </summary>
+    internal class Program
     {
-        static void Main()
+        public static void Main()
         {
             Console.WriteLine("Rebus");
         }

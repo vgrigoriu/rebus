@@ -1,43 +1,47 @@
-﻿using System.IO;
-using System.Linq;
-
-using NUnit.Framework;
-
-using RebusLib;
-using System.Collections;
-using System.Text.RegularExpressions;
-using System.Collections.Generic;
-
-namespace RebusTest
+﻿namespace RebusTest
 {
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
+    using System.Text.RegularExpressions;
+
+    using NUnit.Framework;
+
+    using RebusLib;
+
+    /// <summary>
+    /// Tests for Wordlist
+    /// </summary>
     [TestFixture]
     public class WordlistTest : AssertionHelper
     {
-        private string[] loPriStrings = new string[] { "ana", "are", "mere" };
-        private string[] hiPriStrings = new string[] { "hopai", "tupai", "diridiridam", "are" };
-        private int hiWeight = 14;
-        private int loWeight = 1;
+        private string[] lowPriorityStrings = new string[] { "ana", "are", "mere" };
+        private string[] highPriorityStrings = new string[] { "hopai", "tupai", "diridiridam", "are" };
+        private int highWeight = 14;
+        private int lowWeight = 1;
 
         private Wordlist wordlist;
 
         [TestFixtureSetUp]
         public void Setup()
         {
-            wordlist = new Wordlist();
-            wordlist.Add(loPriStrings, loWeight);
+            this.wordlist = new Wordlist();
+            this.wordlist.Add(this.lowPriorityStrings, this.lowWeight);
         }
 
         [Test]
         public void AddWords()
         {
-            Word[] words = new Word[wordlist.Words.Count];
-            wordlist.Words.CopyTo(words, 0);
+            Word[] words = new Word[this.wordlist.Words.Count];
+            this.wordlist.Words.CopyTo(words, 0);
             Expect(words.Length, Is.EqualTo(3));
-            foreach (string s in loPriStrings)
+            foreach (string s in this.lowPriorityStrings)
             {
                 Expect(List.Map(words).Property("Value"), Has.Some.EqualTo(s));
             }
-            Expect(List.Map(words).Property("Weight"), Has.All.EqualTo(loWeight));
+
+            Expect(List.Map(words).Property("Weight"), Has.All.EqualTo(this.lowWeight));
         }
 
         [Test]
@@ -55,7 +59,7 @@ namespace RebusTest
         public void WordsMatchingTest()
         {
             Regex secondLetterR = new Regex("^.r");
-            ICollection<Word> wordsMatching = wordlist.WordsMatching(secondLetterR);
+            ICollection<Word> wordsMatching = this.wordlist.WordsMatching(secondLetterR);
             Word[] words = new Word[wordsMatching.Count];
             wordsMatching.CopyTo(words, 0);
 
@@ -66,26 +70,29 @@ namespace RebusTest
         [Test]
         public void LowThenHighTest()
         {
-            Wordlist loHiList = new Wordlist();
-            loHiList.Add(loPriStrings, loWeight);
-            loHiList.Add(hiPriStrings, hiWeight);
+            Wordlist lowHighList = new Wordlist();
+            lowHighList.Add(this.lowPriorityStrings, this.lowWeight);
+            lowHighList.Add(this.highPriorityStrings, this.highWeight);
 
-            Word are = loHiList.GetWord("are");
-            Expect(are.Weight, Is.EqualTo(hiWeight));
+            Word are = lowHighList.GetWord("are");
+            Expect(are.Weight, Is.EqualTo(this.highWeight));
         }
 
         [Test]
         public void HighThenLowTest()
         {
-            Wordlist hiLoList = new Wordlist();
-            hiLoList.Add(hiPriStrings, hiWeight);
-            hiLoList.Add(loPriStrings, loWeight);
+            Wordlist highLowList = new Wordlist();
+            highLowList.Add(this.highPriorityStrings, this.highWeight);
+            highLowList.Add(this.lowPriorityStrings, this.lowWeight);
 
-            Word are = hiLoList.GetWord("are");
-            Expect(are.Weight, Is.EqualTo(hiWeight));
+            Word are = highLowList.GetWord("are");
+            Expect(are.Weight, Is.EqualTo(this.highWeight));
         }
 
         [Test]
+        /**
+         * 
+         */
         public void InexistentWordTest()
         {
             Word doesNotExist = this.wordlist.GetWord("dezoxiribonucleic");
