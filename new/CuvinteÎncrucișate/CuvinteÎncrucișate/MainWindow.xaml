@@ -8,7 +8,13 @@
                 <MenuItem x:Name="FileNewMenu" Header="Nou"/>
             </MenuItem>
         </Menu>
-        <StackPanel x:Name="Panel">
+        <StackPanel Orientation="Horizontal">
+            <StackPanel x:Name="Panel" HorizontalAlignment="Center" VerticalAlignment="Center">
+            </StackPanel>
+            <ScrollViewer Width="288">
+                <ListBox x:Name="listaCuvinte"/>
+            </ScrollViewer>
+            <TextBlock x:Name="filtruTextBlock"/>
         </StackPanel>
     </StackPanel>
 </Window>

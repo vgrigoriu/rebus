@@ -19,13 +19,252 @@ namespace CuvinteÎncrucișate
     /// </summary>
     public partial class MainWindow : Window
     {
+        private Pătrățel selectedPătrățel;
+        private Pătrățel SelectedPătrățel
+        {
+            get
+            {
+                return this.selectedPătrățel;
+            }
+            set
+            {
+                if (value != this.selectedPătrățel)
+                {
+                    if (this.selectedPătrățel != null)
+                    {
+                        this.selectedPătrățel.border.BorderThickness = new Thickness(1);
+                    }
+                    this.selectedPătrățel = value;
+                    if (this.selectedPătrățel != null)
+                    {
+                        this.selectedPătrățel.border.BorderThickness = new Thickness(2);
+                    }
+                    OnFiltruChanged();
+                }
+            }
+        }
+
         public MainWindow()
         {
             InitializeComponent();
             this.Loaded += MainWindowLoaded;
             this.FileNewMenu.Click += new RoutedEventHandler(FileNewMenuClick);
+            this.PreviewKeyDown += new KeyEventHandler(MainWindowPreviewKeyDown);
+            this.KeyUp += new KeyEventHandler(MainWindowKeyUp);
         }
 
+        void MainWindowKeyUp(object sender, KeyEventArgs e)
+        {
+            char litera;
+            switch (e.Key)
+            {
+                case Key.Escape:
+                    if (this.SelectedPătrățel != null)
+                    {
+                        this.SelectedPătrățel.ENegru = !this.SelectedPătrățel.ENegru;
+                    }
+                    OnFiltruChanged();
+                    return;
+                case Key.CapsLock:
+                    if (this.direcție == Direcție.Orizontal)
+                    {
+                        this.direcție = Direcție.Vertical;
+                    }
+                    else
+                    {
+                        this.direcție = Direcție.Orizontal;
+                    }
+                    OnFiltruChanged();
+                    return;
+                case Key.A:
+                    litera = 'A';
+                    break;
+                case Key.B:
+                    litera = 'B';
+                    break;
+                case Key.C:
+                    litera = 'C';
+                    break;
+                case Key.D:
+                    litera = 'D';
+                    break;
+                case Key.E:
+                    litera = 'E';
+                    break;
+                case Key.F:
+                    litera = 'F';
+                    break;
+                case Key.G:
+                    litera = 'G';
+                    break;
+                case Key.H:
+                    litera = 'H';
+                    break;
+                case Key.I:
+                    litera = 'I';
+                    break;
+                case Key.J:
+                    litera = 'J';
+                    break;
+                case Key.K:
+                    litera = 'K';
+                    break;
+                case Key.L:
+                    litera = 'L';
+                    break;
+                case Key.M:
+                    litera = 'M';
+                    break;
+                case Key.N:
+                    litera = 'N';
+                    break;
+                case Key.O:
+                    litera = 'O';
+                    break;
+                case Key.P:
+                    litera = 'P';
+                    break;
+                case Key.Q:
+                    litera = 'Q';
+                    break;
+                case Key.R:
+                    litera = 'R';
+                    break;
+                case Key.S:
+                    litera = 'S';
+                    break;
+                case Key.T:
+                    litera = 'T';
+                    break;
+                case Key.U:
+                    litera = 'U';
+                    break;
+                case Key.V:
+                    litera = 'V';
+                    break;
+                case Key.W:
+                    litera = 'W';
+                    break;
+                case Key.X:
+                    litera = 'X';
+                    break;
+                case Key.Y:
+                    litera = 'Y';
+                    break;
+                case Key.Z:
+                    litera = 'Z';
+                    break;
+                case Key.Space:
+                    litera = default(char);
+                    break;
+                default:
+                    // don't change anything if we don't know what it is
+                    return;
+            }
+
+            if (this.SelectedPătrățel != null && !this.SelectedPătrățel.ENegru)
+            {
+                this.SelectedPătrățel.Literă = litera;
+                Pătrățel următorul = UrmătorulNeNegru();
+                if (următorul != null)
+                {
+                    this.SelectedPătrățel = următorul;
+                }
+                OnFiltruChanged();
+            }
+        }
+
+        private Pătrățel UrmătorulNeNegru()
+        {
+            Pătrățel p = După(this.SelectedPătrățel);
+            while (p != null && p.ENegru)
+            {
+                p = După(p);
+            }
+            return p;
+        }
+
+        void MainWindowPreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            Pătrățel p;
+            switch (e.Key)
+            {
+                case Key.Right:
+                    p = FindPătrățelRight();
+                    if (p != null)
+                    {
+                        this.SelectedPătrățel = p;
+                    }
+                    e.Handled = true;
+                    return;
+                case Key.Left:
+                    p = FindPătrățelLeft();
+                    if (p != null)
+                    {
+                        this.SelectedPătrățel = p;
+                    }
+                    e.Handled = true;
+                    return;
+                case Key.Up:
+                    p = FindPătrățelUp();
+                    if (p != null)
+                    {
+                        this.SelectedPătrățel = p;
+                    }
+                    e.Handled = true;
+                    return;
+                case Key.Down:
+                    p = FindPătrățelDown();
+                    if (p != null)
+                    {
+                        this.SelectedPătrățel = p;
+                    }
+                    e.Handled = true;
+                    return;
+            }
+        }
+
+        private Pătrățel FindPătrățelRight()
+        {
+            Pătrățel p = this.SelectedPătrățel.Right;
+            /*while (p != null && p.ENegru)
+            {
+                p = p.Right;
+            }*/
+
+            return p;
+        }
+
+        private Pătrățel FindPătrățelLeft()
+        {
+            Pătrățel p = this.SelectedPătrățel.Left;
+            /*while (p != null && p.ENegru)
+            {
+                p = p.Left;
+            }*/
+
+            return p;
+        }
+        private Pătrățel FindPătrățelUp()
+        {
+            Pătrățel p = this.SelectedPătrățel.Up;
+            /*while (p != null && p.ENegru)
+            {
+                p = p.Up;
+            }*/
+
+            return p;
+        }
+        private Pătrățel FindPătrățelDown()
+        {
+            Pătrățel p = this.SelectedPătrățel.Down;
+            /*while (p != null && p.ENegru)
+            {
+                p = p.Down;
+            }*/
+
+            return p;
+        }
         void FileNewMenuClick(object sender, RoutedEventArgs e)
         {
             MărimeCareuWindow window = new MărimeCareuWindow();
@@ -57,6 +296,9 @@ namespace CuvinteÎncrucișate
         {
             Pătrățel[,] patrate = new Pătrățel[orizontal, vertical];
             Grid grid = new Grid();
+            grid.Width = orizontal * 32;
+            grid.Height = vertical * 32;
+            FocusManager.SetIsFocusScope(grid, true);
             this.Panel.Children.Clear();
             this.Panel.Children.Add(grid);
             for (int x = 0; x < orizontal; x++)
@@ -105,19 +347,117 @@ namespace CuvinteÎncrucișate
                     grid.Children.Add(p);
                 }
             }
-            patrate[0, 0].Focus();
+            this.SelectedPătrățel = patrate[0, 0];
         }
 
         void MainWindowLoaded(object sender, RoutedEventArgs e)
         {
-            Pătrățel p1 = new Pătrățel();
-            p1.Literă = 'Q';
-            this.Panel.Children.Add(p1);
-            Pătrățel p2 = new Pătrățel();
-            this.Panel.Children.Add(p2);
-            p1.Down = p2;
-            p2.Up = p1;
-            p2.Focus();
+            CreateCareu(10, 10);
+            this.listaCuvinte.ItemsSource = new string[] { "ANA", "ARE", "MERE" };
+        }
+
+        enum Direcție
+        {
+            Orizontal,
+            Vertical
+        }
+
+        private Direcție direcție = Direcție.Orizontal;
+
+        private Pătrățel Înainte(Pătrățel p)
+        {
+            if (this.direcție == Direcție.Orizontal)
+            {
+                return p.Left;
+            }
+            else
+            {
+                return p.Up;
+            }
+        }
+
+        private Pătrățel După(Pătrățel p)
+        {
+            if (this.direcție == Direcție.Orizontal)
+            {
+                return p.Right;
+            }
+            else
+            {
+                return p.Down;
+            }
+        }
+
+        string filtru;
+        private void OnFiltruChanged()
+        {
+            string filtruNou = GetFiltru();
+            if (this.filtru != filtruNou)
+            {
+                this.filtru = filtruNou;
+                this.filtruTextBlock.Text = this.filtru;
+            }
+        }
+
+        private string GetFiltru()
+        {
+            // găsește începutul
+            Pătrățel curent = this.SelectedPătrățel;
+            if (curent.ENegru)
+            {
+                return string.Empty;
+            }
+            bool laÎnceput = false;
+            while (!laÎnceput)
+            {
+                Pătrățel înainte = Înainte(curent);
+                if (înainte != null && !înainte.ENegru)
+                {
+                    curent = înainte;
+                }
+                else
+                {
+                    laÎnceput = true;
+                }
+            }
+
+            // sari peste spații
+            int nrSpații = 0;
+            while (curent != null && !curent.ENegru && curent.Literă == default(char))
+            {
+                curent = După(curent);
+                nrSpații++;
+            }
+
+            // construiește filtrul
+            StringBuilder filtru = new StringBuilder();
+            filtru.Append("^");
+            if (nrSpații != 0)
+            {
+                filtru.Append(".{0," + nrSpații.ToString() + "}");
+            }
+            nrSpații = 0;
+            while (curent != null && !curent.ENegru)
+            {
+                if (curent.Literă == default(char))
+                {
+                    nrSpații++;
+                }
+                else
+                {
+                    filtru.Append('.', nrSpații);
+                    filtru.Append(curent.Literă);
+                    nrSpații = 0;
+                }
+
+                curent = După(curent);
+            }
+            if (nrSpații != 0)
+            {
+                filtru.Append(".{0," + nrSpații.ToString() + "}");
+            }
+            filtru.Append("$");
+            return filtru.ToString();
         }
     }
 }

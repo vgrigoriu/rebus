@@ -23,46 +23,6 @@ namespace CuvinteÎncrucișate
         public Pătrățel()
         {
             InitializeComponent();
-            this.GotFocus += new RoutedEventHandler(PătrățelGotFocus);
-            this.LostFocus += new RoutedEventHandler(PătrățelLostFocus);
-            this.MouseDown += new MouseButtonEventHandler(PătrățelMouseDown);
-            this.KeyUp += new KeyEventHandler(PătrățelKeyUp);
-            this.PreviewKeyDown += new KeyEventHandler(PătrățelPreviewKeyDown);
-        }
-
-        void PătrățelPreviewKeyDown(object sender, KeyEventArgs e)
-        {
-            switch (e.Key)
-            {
-                case Key.Right:
-                    if (this.Right != null)
-                    {
-                        this.Right.Focus();
-                    }
-                    e.Handled = true;
-                    return;
-                case Key.Left:
-                    if (this.Left != null)
-                    {
-                        this.Left.Focus();
-                    }
-                    e.Handled = true;
-                    return;
-                case Key.Up:
-                    if (this.Up != null)
-                    {
-                        this.Up.Focus();
-                    }
-                    e.Handled = true;
-                    return;
-                case Key.Down:
-                    if (this.Down != null)
-                    {
-                        this.Down.Focus();
-                    }
-                    e.Handled = true;
-                    return;
-            }
         }
 
         internal Pătrățel Left { get; set; }
@@ -70,130 +30,40 @@ namespace CuvinteÎncrucișate
         internal Pătrățel Up { get; set; }
         internal Pătrățel Down { get; set; }
 
-        void PătrățelKeyUp(object sender, KeyEventArgs e)
+        private bool eNegru;
+        public bool ENegru
         {
-            char litera;
-            switch (e.Key)
+            get
             {
-                case Key.A:
-                    litera = 'A';
-                    break;
-                case Key.B:
-                    litera = 'B';
-                    break;
-                case Key.C:
-                    litera = 'C';
-                    break;
-                case Key.D:
-                    litera = 'D';
-                    break;
-                case Key.E:
-                    litera = 'E';
-                    break;
-                case Key.F:
-                    litera = 'F';
-                    break;
-                case Key.G:
-                    litera = 'G';
-                    break;
-                case Key.H:
-                    litera = 'H';
-                    break;
-                case Key.I:
-                    litera = 'I';
-                    break;
-                case Key.J:
-                    litera = 'J';
-                    break;
-                case Key.K:
-                    litera = 'K';
-                    break;
-                case Key.L:
-                    litera = 'L';
-                    break;
-                case Key.M:
-                    litera = 'M';
-                    break;
-                case Key.N:
-                    litera = 'N';
-                    break;
-                case Key.O:
-                    litera = 'O';
-                    break;
-                case Key.P:
-                    litera = 'P';
-                    break;
-                case Key.Q:
-                    litera = 'Q';
-                    break;
-                case Key.R:
-                    litera = 'R';
-                    break;
-                case Key.S:
-                    litera = 'S';
-                    break;
-                case Key.T:
-                    litera = 'T';
-                    break;
-                case Key.U:
-                    litera = 'U';
-                    break;
-                case Key.V:
-                    litera = 'V';
-                    break;
-                case Key.W:
-                    litera = 'W';
-                    break;
-                case Key.X:
-                    litera = 'X';
-                    break;
-                case Key.Y:
-                    litera = 'Y';
-                    break;
-                case Key.Z:
-                    litera = 'Z';
-                    break;
-                case Key.Space:
-                    litera = default(char);
-                    break;
-                default:
-                    // don't change anything if we don't know what it is
-                    return;
+                return this.eNegru;
             }
-            this.Literă = litera;
-        }
-
-        void PătrățelMouseDown(object sender, MouseButtonEventArgs e)
-        {
-            if (!this.IsFocused)
+            set
             {
-                this.Focus();
+                this.eNegru = value;
+                if (this.eNegru)
+                {
+                    this.border.Background = Brushes.Black;
+                    this.border.BorderBrush = Brushes.White;
+                }
+                else
+                {
+                    this.border.Background = Brushes.White;
+                    this.border.BorderBrush = Brushes.Black;
+                }
             }
         }
-
-        void PătrățelLostFocus(object sender, RoutedEventArgs e)
-        {
-            this.border.Background = Brushes.White;
-        }
-
-        void PătrățelGotFocus(object sender, RoutedEventArgs e)
-        {
-            //MessageBox.Show("cucu");
-            Keyboard.Focus(this);
-            this.border.Background = Brushes.PeachPuff;
-        }
-
-
 
         public char Literă
         {
             get
             {
+                Trace.Assert(!this.ENegru);
                 string text = this.textBox.Text;
                 return text.SingleOrDefault();
             }
             set
             {
+                Trace.Assert(!this.ENegru);
                 Trace.Assert("ABCDEFGHIJKLMNOPQRSTUVWXYZ".Contains(value) || value == default(char));
                 if (value == default(char))
                 {
