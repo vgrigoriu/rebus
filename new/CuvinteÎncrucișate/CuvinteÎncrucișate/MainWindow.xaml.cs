@@ -11,6 +11,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.IO;
+using System.Text.RegularExpressions;
 
 namespace CuvinteÎncrucișate
 {
@@ -350,10 +352,27 @@ namespace CuvinteÎncrucișate
             this.SelectedPătrățel = patrate[0, 0];
         }
 
+        IEnumerable<string> allWords;
         void MainWindowLoaded(object sender, RoutedEventArgs e)
         {
+            this.allWords = File.ReadAllLines("words.ro-ro.txt");
+            AfiseazaLista(this.allWords);
             CreateCareu(10, 10);
-            this.listaCuvinte.ItemsSource = new string[] { "ANA", "ARE", "MERE" };
+            //this.listaCuvinte.ItemsSource = new string[] { "ANA", "ARE", "MERE" };
+        }
+
+        private void AfiseazaLista(IEnumerable<string> cuvinte)
+        {
+            this.listaCuvinte.ItemsSource = null;
+            this.listaCuvinte.Items.Clear();
+            if (cuvinte.Count() < 100)
+            {
+                this.listaCuvinte.ItemsSource = cuvinte;
+            }
+            else
+            {
+                this.listaCuvinte.Items.Add("PREA MULTE");
+            }
         }
 
         enum Direcție
@@ -396,6 +415,13 @@ namespace CuvinteÎncrucișate
             {
                 this.filtru = filtruNou;
                 this.filtruTextBlock.Text = this.filtru;
+                if (!string.IsNullOrEmpty(this.filtru))
+                {
+                    var cuvintePotrivite = from s in this.allWords
+                                           where Regex.IsMatch(s, filtru, RegexOptions.IgnoreCase)
+                                           select s;
+                    AfiseazaLista(cuvintePotrivite);
+                }
             }
         }
 
