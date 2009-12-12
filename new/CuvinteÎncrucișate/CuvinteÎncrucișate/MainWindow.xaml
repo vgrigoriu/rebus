@@ -1,7 +1,7 @@
 ﻿<Window x:Class="CuvinteÎncrucișate.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="MainWindow" Height="350" Width="525">
+        Title="MainWindow">
     <StackPanel>
         <Menu>
             <MenuItem Header="Fișier">
@@ -11,7 +11,7 @@
         <StackPanel Orientation="Horizontal">
             <StackPanel x:Name="Panel" HorizontalAlignment="Center" VerticalAlignment="Center">
             </StackPanel>
-            <ScrollViewer Width="288">
+            <ScrollViewer Width="288" Height="700">
                 <ListBox x:Name="listaCuvinte"/>
             </ScrollViewer>
             <TextBlock x:Name="filtruTextBlock"/>

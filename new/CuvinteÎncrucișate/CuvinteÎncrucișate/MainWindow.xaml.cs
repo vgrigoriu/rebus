@@ -42,6 +42,72 @@ namespace CuvinteÎncrucișate
                         this.selectedPătrățel.border.BorderThickness = new Thickness(2);
                     }
                     OnFiltruChanged();
+                    EvidențiazăRîndSauColoană();
+                }
+            }
+        }
+
+        private void EvidențiazăRîndSauColoană()
+        {
+            for (int i = 0; i < this.patrate.GetLength(0); i++)
+            {
+                for (int j = 0; j < this.patrate.GetLength(1); j++)
+                {
+                    if (this.patrate[i, j] == this.SelectedPătrățel)
+                    {
+                        if (this.direcție == Direcție.Orizontal)
+                        {
+                            ColoreazăRîndul(j);
+                            return;
+                        }
+                        else
+                        {
+                            ColoreazăColoana(i);
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+
+        private void ColoreazăColoana(int coloană)
+        {
+            for (int i = 0; i < this.patrate.GetLength(0); i++)
+            {
+                for (int j = 0; j < this.patrate.GetLength(1); j++)
+                {
+                    if (!this.patrate[i, j].ENegru)
+                    {
+                        if (i == coloană)
+                        {
+                            this.patrate[i, j].border.Background = new SolidColorBrush(Color.FromArgb(15, 0, 0, 15));
+                        }
+                        else
+                        {
+                            this.patrate[i, j].border.Background = Brushes.White;
+                        }
+                    }
+                }
+            }
+        }
+
+        private void ColoreazăRîndul(int rînd)
+        {
+            for (int i = 0; i < this.patrate.GetLength(0); i++)
+            {
+                for (int j = 0; j < this.patrate.GetLength(1); j++)
+                {
+                    if (!this.patrate[i, j].ENegru)
+                    {
+                        if (j == rînd)
+                        {
+                            this.patrate[i, j].border.Background = new SolidColorBrush(Color.FromArgb(15, 0, 0, 15));
+                        }
+                        else
+                        {
+                            this.patrate[i, j].border.Background = Brushes.White;
+                        }
+                    }
                 }
             }
         }
@@ -77,6 +143,7 @@ namespace CuvinteÎncrucișate
                         this.direcție = Direcție.Orizontal;
                     }
                     OnFiltruChanged();
+                    EvidențiazăRîndSauColoană();
                     return;
                 case Key.A:
                     litera = 'A';
@@ -294,9 +361,10 @@ namespace CuvinteÎncrucișate
             }
         }
 
+        private Pătrățel[,] patrate;
         private void CreateCareu(int orizontal, int vertical)
         {
-            Pătrățel[,] patrate = new Pătrățel[orizontal, vertical];
+            this.patrate = new Pătrățel[orizontal, vertical];
             Grid grid = new Grid();
             grid.Width = orizontal * 32;
             grid.Height = vertical * 32;
@@ -317,7 +385,7 @@ namespace CuvinteÎncrucișate
             {
                 for (int y = 0; y < vertical; y++)
                 {
-                    patrate[x, y] = new Pătrățel();
+                    this.patrate[x, y] = new Pătrățel();
                 }
             }
 
@@ -326,22 +394,22 @@ namespace CuvinteÎncrucișate
             {
                 for (int y = 0; y < vertical; y++)
                 {
-                    Pătrățel p = patrate[x, y];
+                    Pătrățel p = this.patrate[x, y];
                     if (x > 0)
                     {
-                        p.Left = patrate[x - 1, y];
+                        p.Left = this.patrate[x - 1, y];
                     }
                     if (x < orizontal - 1)
                     {
-                        p.Right = patrate[x + 1, y];
+                        p.Right = this.patrate[x + 1, y];
                     }
                     if (y > 0)
                     {
-                        p.Up = patrate[x, y - 1];
+                        p.Up = this.patrate[x, y - 1];
                     }
                     if (y < vertical - 1)
                     {
-                        p.Down = patrate[x, y + 1];
+                        p.Down = this.patrate[x, y + 1];
                     }
 
                     Grid.SetColumn(p, x);
@@ -349,7 +417,7 @@ namespace CuvinteÎncrucișate
                     grid.Children.Add(p);
                 }
             }
-            this.SelectedPătrățel = patrate[0, 0];
+            this.SelectedPătrățel = this.patrate[0, 0];
         }
 
         IEnumerable<string> allWords;
@@ -365,13 +433,17 @@ namespace CuvinteÎncrucișate
         {
             this.listaCuvinte.ItemsSource = null;
             this.listaCuvinte.Items.Clear();
-            if (cuvinte.Count() < 100)
+            if (cuvinte.Count() == 0)
+            {
+                this.listaCuvinte.Items.Add("NICI UN CUVÎNT");
+            }
+            else if (cuvinte.Count() < 100)
             {
                 this.listaCuvinte.ItemsSource = cuvinte;
             }
             else
             {
-                this.listaCuvinte.Items.Add("PREA MULTE");
+                this.listaCuvinte.Items.Add("PREA MULTE CUVINTE");
             }
         }
 
