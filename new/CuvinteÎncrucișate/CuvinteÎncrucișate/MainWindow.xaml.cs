@@ -433,17 +433,18 @@ namespace CuvinteÎncrucișate
         {
             this.listaCuvinte.ItemsSource = null;
             this.listaCuvinte.Items.Clear();
-            if (cuvinte.Count() == 0)
+            int cîteCuvinte = cuvinte.Count();
+            if (cîteCuvinte == 0)
             {
                 this.listaCuvinte.Items.Add("NICI UN CUVÎNT");
             }
-            else if (cuvinte.Count() < 100)
+            else if (cîteCuvinte < 100)
             {
                 this.listaCuvinte.ItemsSource = cuvinte;
             }
             else
             {
-                this.listaCuvinte.Items.Add("PREA MULTE CUVINTE");
+                this.listaCuvinte.Items.Add(cîteCuvinte.ToString() + " CUVINTE");
             }
         }
 
