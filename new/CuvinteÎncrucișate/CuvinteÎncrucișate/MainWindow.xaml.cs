@@ -39,9 +39,9 @@ namespace CuvinteÎncrucișate
                     this.selectedPătrățel = value;
                     if (this.selectedPătrățel != null)
                     {
-                        this.selectedPătrățel.border.BorderThickness = new Thickness(2);
+                        this.selectedPătrățel.border.BorderThickness = new Thickness(3);
                     }
-                    OnFiltruChanged();
+                    OnNewFiltru();
                     EvidențiazăRîndSauColoană();
                 }
             }
@@ -131,7 +131,7 @@ namespace CuvinteÎncrucișate
                     {
                         this.SelectedPătrățel.ENegru = !this.SelectedPătrățel.ENegru;
                     }
-                    OnFiltruChanged();
+                    OnNewFiltru();
                     return;
                 case Key.CapsLock:
                     if (this.direcție == Direcție.Orizontal)
@@ -142,7 +142,7 @@ namespace CuvinteÎncrucișate
                     {
                         this.direcție = Direcție.Orizontal;
                     }
-                    OnFiltruChanged();
+                    OnNewFiltru();
                     EvidențiazăRîndSauColoană();
                     return;
                 case Key.A:
@@ -235,11 +235,19 @@ namespace CuvinteÎncrucișate
             {
                 this.SelectedPătrățel.Literă = litera;
                 Pătrățel următorul = UrmătorulNeNegru();
+                bool următorulLîngă = următorul == După(this.SelectedPătrățel);
+                if (următorulLîngă && litera != default(char))
+                {
+                    OnFiltruModified();
+                }
                 if (următorul != null)
                 {
                     this.SelectedPătrățel = următorul;
                 }
-                OnFiltruChanged();
+                if (!următorulLîngă || litera == default(char))
+                {
+                    OnNewFiltru();
+                }
             }
         }
 
@@ -366,18 +374,38 @@ namespace CuvinteÎncrucișate
         {
             this.patrate = new Pătrățel[orizontal, vertical];
             Grid grid = new Grid();
-            grid.Width = orizontal * 32;
-            grid.Height = vertical * 32;
+            grid.Width = (orizontal + 1) * 32;
+            grid.Height = (vertical + 1) * 32;
             FocusManager.SetIsFocusScope(grid, true);
             this.Panel.Children.Clear();
             this.Panel.Children.Add(grid);
-            for (int x = 0; x < orizontal; x++)
+            for (int x = 0; x < orizontal + 1; x++)
             {
                 grid.ColumnDefinitions.Add(new ColumnDefinition());
             }
-            for (int y = 0; y < vertical; y++)
+            for (int y = 0; y < vertical + 1; y++)
             {
                 grid.RowDefinitions.Add(new RowDefinition());
+            }
+
+            // add numbers on upper & left side
+            for (int row = 1; row < vertical + 1; row++)
+            {
+                TextBlock number = new TextBlock();
+                number.TextAlignment = TextAlignment.Center;
+                number.Text = row.ToString();
+                Grid.SetRow(number, row);
+                Grid.SetColumn(number, 0);
+                grid.Children.Add(number);
+            }
+            for (int column = 1; column < orizontal + 1; column++)
+            {
+                TextBlock number = new TextBlock();
+                number.TextAlignment = TextAlignment.Center;
+                number.Text = column.ToString();
+                Grid.SetRow(number, 0);
+                Grid.SetColumn(number, column);
+                grid.Children.Add(number);
             }
 
             // create them
@@ -412,8 +440,8 @@ namespace CuvinteÎncrucișate
                         p.Down = this.patrate[x, y + 1];
                     }
 
-                    Grid.SetColumn(p, x);
-                    Grid.SetRow(p, y);
+                    Grid.SetColumn(p, x + 1);
+                    Grid.SetRow(p, y + 1);
                     grid.Children.Add(p);
                 }
             }
@@ -424,6 +452,7 @@ namespace CuvinteÎncrucișate
         void MainWindowLoaded(object sender, RoutedEventArgs e)
         {
             this.allWords = File.ReadAllLines("words.ro-ro.txt");
+            this.allWords = this.allWords.Select(s => s.ToUpperInvariant());
             AfiseazaLista(this.allWords);
             CreateCareu(10, 10);
             //this.listaCuvinte.ItemsSource = new string[] { "ANA", "ARE", "MERE" };
@@ -481,7 +510,8 @@ namespace CuvinteÎncrucișate
         }
 
         string filtru;
-        private void OnFiltruChanged()
+        IEnumerable<string> cuvintePotrivite;
+        private void OnNewFiltru()
         {
             string filtruNou = GetFiltru();
             if (this.filtru != filtruNou)
@@ -490,12 +520,34 @@ namespace CuvinteÎncrucișate
                 this.filtruTextBlock.Text = this.filtru;
                 if (!string.IsNullOrEmpty(this.filtru))
                 {
-                    var cuvintePotrivite = from s in this.allWords
-                                           where Regex.IsMatch(s, filtru, RegexOptions.IgnoreCase)
-                                           select s;
-                    AfiseazaLista(cuvintePotrivite);
+                    this.cuvintePotrivite = (from s in this.allWords
+                                           where Regex.IsMatch(s, filtru)
+                                           select s).ToArray();
+                    AfiseazaLista(this.cuvintePotrivite);
                 }
             }
+        }
+
+        private void OnFiltruModified()
+        {
+            string filtruNou = GetFiltru();
+            if (this.filtru != filtruNou)
+            {
+                this.filtru = filtruNou;
+                this.filtruTextBlock.Text = this.filtru;
+                if (!string.IsNullOrEmpty(this.filtru))
+                {
+                    ModificaLista(this.filtru);
+                }
+            }
+        }
+
+        private void ModificaLista(string p)
+        {
+            this.cuvintePotrivite = (from s in this.cuvintePotrivite
+                                                where Regex.IsMatch(s, p)
+                                                select s).ToArray();
+            AfiseazaLista(this.cuvintePotrivite);
         }
 
         private string GetFiltru()
