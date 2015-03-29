@@ -455,7 +455,6 @@ namespace CuvinteÎncrucișate
             this.allWords = this.allWords.Select(s => s.ToUpperInvariant());
             AfiseazaLista(this.allWords);
             CreateCareu(10, 10);
-            //this.listaCuvinte.ItemsSource = new string[] { "ANA", "ARE", "MERE" };
         }
 
         private void AfiseazaLista(IEnumerable<string> cuvinte)
@@ -473,7 +472,7 @@ namespace CuvinteÎncrucișate
             }
             else
             {
-                this.listaCuvinte.Items.Add(cîteCuvinte.ToString() + " CUVINTE");
+                this.listaCuvinte.Items.Add($"{cîteCuvinte} cuvinte");
             }
         }
 
