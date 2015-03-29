@@ -1,0 +1,12 @@
+﻿<Window x:Class="CuvinteÎncrucișate.MărimeCareuWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="MărimeCareuWindow" Height="143" Width="155">
+    <Grid>
+        <TextBlock Height="23" HorizontalAlignment="Left" Margin="12,12,0,0" Name="textBlock1" Text="Orizontal:" VerticalAlignment="Top" Width="65" TextAlignment="Right" />
+        <TextBox x:Name="orizontal" Height="23" HorizontalAlignment="Left" Margin="83,12,0,0" VerticalAlignment="Top" Width="38" Text="10" />
+        <TextBlock Height="23" HorizontalAlignment="Left" Margin="12,41,0,0" Name="textBlock2" Text="Vertical:" VerticalAlignment="Top" Width="65" TextAlignment="Right" />
+        <TextBox x:Name="vertical" Height="23" HorizontalAlignment="Left" Margin="83,41,0,0" VerticalAlignment="Top" Width="38" Text="10" />
+        <Button Content="OK" Height="23" HorizontalAlignment="Left" Margin="12,70,0,0" x:Name="okButton" VerticalAlignment="Top" Width="109" />
+    </Grid>
+</Window>
